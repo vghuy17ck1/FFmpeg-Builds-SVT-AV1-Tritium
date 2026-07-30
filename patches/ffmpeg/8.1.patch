@@ -49,7 +49,7 @@ index fec2ed596e..72e6a42ef4 100644
  static const AVOption options[] = {
      { "preset", "Encoding preset",
 -      OFFSET(enc_mode), AV_OPT_TYPE_INT, { .i64 = -2 }, -2, MAX_ENC_PRESET, VE },
-+      OFFSET(enc_mode), AV_OPT_TYPE_INT, { .i64 = -4 }, -4, MAX_ENC_PRESET, VE },
++      OFFSET(enc_mode), AV_OPT_TYPE_INT, { .i64 = -3 }, -3, MAX_ENC_PRESET, VE },
  
      FF_AV1_PROFILE_OPTS
  
