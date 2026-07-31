@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/vghuy17ck1/svt-av1-tritium.git"
-SCRIPT_COMMIT="67f0e42c8b958ca7cc6cfe19fd37e5fdd752eda2"
+SCRIPT_COMMIT="f8691f04c4dc10b6f271756ae9526abf819ed1e3"
 
 ffbuild_depends() {
     echo libdovi
@@ -26,6 +26,23 @@ ffbuild_dockerbuild() {
         -DEXT_LIB_STATIC=ON -DLIBDOVI_FOUND=ON -DLIBHDR10PLUS_RS_FOUND=ON ..
     make -j$(nproc)
     make install DESTDIR="$FFBUILD_DESTDIR"
+}
+
+ffbuild_ldflags() {
+    # libdovi.a, libhdr10plus-rs.a and librav1e.a are each --crt-static Rust
+    # staticlibs, so each bakes in its own copy of the Rust runtime. Now that
+    # SvtAv1Enc genuinely references dovi_*/hdr10plus_*, the linker pulls std
+    # members out of more than one of them and trips over duplicate
+    # rust_eh_personality, GLOBAL_PANIC_COUNT, driftsort_main, etc. All three
+    # are built by the same rustc in the same image, so the definitions are
+    # identical and keeping the first one is safe.
+    #
+    # Confining this to the Rust archives instead (ld -r --whole-archive, then
+    # objcopy --keep-global-symbol to hide the runtime) is not possible on
+    # Windows: mingw ld cannot do a relocatable link of these archives, it
+    # fails with "unable to fill in DataDirectory[9]: _tls_used not defined
+    # correctly". So the link-wide flag it is.
+    echo "-Wl,--allow-multiple-definition"
 }
 
 ffbuild_configure() {
