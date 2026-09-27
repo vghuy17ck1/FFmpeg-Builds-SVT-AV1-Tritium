@@ -11,6 +11,10 @@ SCRIPT_REPO3="https://github.com/FFmpeg/nv-codec-headers.git"
 SCRIPT_COMMIT3="833faee5f7b8d3f56444347c587f4aed11ee213f"
 SCRIPT_BRANCH3="sdk/11.1"
 
+SCRIPT_REPO4="https://github.com/FFmpeg/nv-codec-headers.git"
+SCRIPT_COMMIT4="f8339c06648fb6642aac1261d76e4158dc0b5401"
+SCRIPT_BRANCH4="sdk/12.2"
+
 ffbuild_enabled() {
     [[ $TARGET == winarm64 ]] && (( $(ffbuild_ffver) <= 801 )) && return -1
     (( $(ffbuild_ffver) >= 404 )) || return -1
@@ -21,10 +25,13 @@ ffbuild_dockerdl() {
     default_dl ffnvcodec
     echo "git-mini-clone \"$SCRIPT_REPO2\" \"$SCRIPT_COMMIT2\" ffnvcodec2"
     echo "git-mini-clone \"$SCRIPT_REPO3\" \"$SCRIPT_COMMIT3\" ffnvcodec3"
+    echo "git-mini-clone \"$SCRIPT_REPO4\" \"$SCRIPT_COMMIT4\" ffnvcodec4"
 }
 
 ffbuild_dockerbuild() {
-    if (( $FFVER < 800 )); then
+    if [[ $ADDINS_STR == *nvsdk12* ]]; then
+        cd ffnvcodec4
+    elif (( $FFVER < 800 )); then
         cd ffnvcodec3
     elif (( $FFVER <= 801 )); then
         cd ffnvcodec2
