@@ -234,6 +234,15 @@ jobs:
             target: linuxarm64
             variant: gpl
             tag_suffix: -arm
+          - runner: ubuntu-latest
+            target: win64
+            variant: nonfree nvsdk12
+          - runner: ubuntu-latest
+            target: win64
+            variant: nonfree nvsdk12 8.1
+          - runner: ubuntu-latest
+            target: win64
+            variant: nonfree nvsdk12 9.0
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -300,6 +309,13 @@ jobs:
       matrix:
         target: [win64,linux64,linuxarm64]
         variant: [gpl,gpl 8.1,gpl 9.0,nonfree,nonfree 8.1,nonfree 9.0,nonfree-shared,nonfree-shared 8.1,nonfree-shared 9.0]
+        include:
+          - target: win64
+            variant: nonfree nvsdk12
+          - target: win64
+            variant: nonfree nvsdk12 8.1
+          - target: win64
+            variant: nonfree nvsdk12 9.0
     steps:
       - name: Checkout
         uses: actions/checkout@v7
