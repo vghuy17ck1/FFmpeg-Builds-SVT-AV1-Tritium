@@ -138,7 +138,7 @@ jobs:
       fail-fast: false
       matrix:
         runner: [ubuntu-latest]
-        target: [win32,win64,winarm64,linux32,linux64,linuxarm64]
+        target: [win32,win64,linux32,linux64,linuxarm64]
         include:
           - runner: ubuntu-26.04-arm
             target: linuxarm64
@@ -200,7 +200,7 @@ jobs:
       fail-fast: false
       matrix:
         runner: [ubuntu-latest]
-        target: [win64,winarm64,linux64,linuxarm64]
+        target: [win64,linux64,linuxarm64]
         variant: [gpl,gpl 8.1,gpl 9.0,nonfree,nonfree 8.1,nonfree 9.0,nonfree-shared,nonfree-shared 8.1,nonfree-shared 9.0]
         include:
           - runner: ubuntu-latest
@@ -298,7 +298,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [win64,winarm64,linux64,linuxarm64]
+        target: [win64,linux64,linuxarm64]
         variant: [gpl,gpl 8.1,gpl 9.0,nonfree,nonfree 8.1,nonfree 9.0,nonfree-shared,nonfree-shared 8.1,nonfree-shared 9.0]
     steps:
       - name: Checkout
