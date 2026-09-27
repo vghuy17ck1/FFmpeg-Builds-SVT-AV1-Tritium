@@ -1,8 +1,8 @@
 diff --git a/libavcodec/libsvtav1.c b/libavcodec/libsvtav1.c
-index fec2ed596e..72e6a42ef4 100644
+index 0bcc176243..5082310875 100644
 --- a/libavcodec/libsvtav1.c
 +++ b/libavcodec/libsvtav1.c
-@@ -71,9 +71,9 @@ typedef struct SvtContext {
+@@ -72,9 +72,9 @@ typedef struct SvtContext {
  
      // User options.
      AVDictionary *svtav1_opts;
@@ -15,7 +15,7 @@ index fec2ed596e..72e6a42ef4 100644
  } SvtContext;
  
  static const struct {
-@@ -208,6 +208,7 @@ static void handle_side_data(AVCodecContext *avctx,
+@@ -209,6 +209,7 @@ static void handle_side_data(AVCodecContext *avctx,
      }
  }
  
@@ -23,8 +23,8 @@ index fec2ed596e..72e6a42ef4 100644
  static int config_enc_params(EbSvtAv1EncConfiguration *param,
                               AVCodecContext *avctx)
  {
-@@ -216,7 +217,7 @@ static int config_enc_params(EbSvtAv1EncConfiguration *param,
-     av_unused const AVDictionaryEntry *en = NULL;
+@@ -234,7 +235,7 @@ static int config_enc_params(EbSvtAv1EncConfiguration *param,
+ #endif
  
      // Update param from options
 -    if (svt_enc->enc_mode >= -1)
@@ -32,7 +32,7 @@ index fec2ed596e..72e6a42ef4 100644
          param->enc_mode             = svt_enc->enc_mode;
  
      if (avctx->bit_rate) {
-@@ -236,8 +237,10 @@ static int config_enc_params(EbSvtAv1EncConfiguration *param,
+@@ -254,8 +255,11 @@ static int config_enc_params(EbSvtAv1EncConfiguration *param,
              FFMAX(avctx->bit_rate, avctx->rc_max_rate);
  
      if (svt_enc->crf > 0) {
@@ -40,11 +40,12 @@ index fec2ed596e..72e6a42ef4 100644
 +        param->qp                   = FFMIN(MAX_QP_VALUE, (uint32_t)svt_enc->crf);
          param->rate_control_mode    = 0;
 +        uint32_t extended_q_index   = (uint32_t)(svt_enc->crf * 4);
++
 +        param->extended_crf_qindex_offset = extended_q_index - param->qp * 4;
      } else if (svt_enc->qp > 0) {
          param->qp                   = svt_enc->qp;
          param->rate_control_mode    = 0;
-@@ -773,7 +776,7 @@ static av_cold int eb_enc_close(AVCodecContext *avctx)
+@@ -791,7 +795,7 @@ static av_cold int eb_enc_close(AVCodecContext *avctx)
  #define VE AV_OPT_FLAG_VIDEO_PARAM | AV_OPT_FLAG_ENCODING_PARAM
  static const AVOption options[] = {
      { "preset", "Encoding preset",
@@ -53,7 +54,7 @@ index fec2ed596e..72e6a42ef4 100644
  
      FF_AV1_PROFILE_OPTS
  
-@@ -805,8 +808,8 @@ static const AVOption options[] = {
+@@ -823,8 +827,8 @@ static const AVOption options[] = {
          { LEVEL("7.3", 73) },
  #undef LEVEL
  
