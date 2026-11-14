@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/vghuy17ck1/svt-av1-tritium.git"
-SCRIPT_COMMIT="90ca6971c8c515ee2ba601a4d49c40ad7c2fc801"
+SCRIPT_COMMIT="6076fe59cc39930dc2442d8349c65e3bed3520c2"
 
 ffbuild_depends() {
     echo libdovi
